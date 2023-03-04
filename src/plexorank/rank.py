@@ -2,7 +2,7 @@
 """Functions around generating and modifying elements utilizing a lexicographical ranking system"""
 from math import floor
 
-from utils import (
+from .utils import (
     convert_to_base10,
     convert_to_base26,
     decipher_rank,
