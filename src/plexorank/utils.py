@@ -1,7 +1,7 @@
 """Utility functions for lexicographical ranking"""
 from math import floor
 
-from .cipher_tables import decipher_table, cipher_table
+from plexorank.cipher_tables import decipher_table, cipher_table
 
 
 def find_mean(high, low):
