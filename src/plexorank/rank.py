@@ -1,4 +1,3 @@
-
 """Functions around generating and modifying elements utilizing a lexicographical ranking system"""
 from math import floor
 
@@ -8,24 +7,34 @@ from plexorank.utils import (
     decipher_rank,
     find_mean,
     get_greater_length,
+    increment_deciphered_rank,
     normalize_rank,
     recipher,
+    validate_rank,
 )
 
-LOWEST_RANK = "aaaaaa"
-LOWEST_RANK_VALUE = 0
-HIGHEST_RANK = "eeeeee"
-HIGHEST_RANK_VALUE = 49426524
+LOWEST_INITIAL_RANK = "bbbbbb"
+LOWEST_INITIAL_RANK_VALUE = 12356631
+HIGHEST_INITIAL_RANK = "ffffff"
+HIGHEST_INITIAL_RANK_VALUE = 61783155
 INITIAL_CIPHER_LENGTH = 6
 
+# Increment depth describes which "position" you want to increment by 1:
+# - depth = 0 :: 'aaaaaa' -> 'aaaaab'
+# - depth = 1 :: 'aaaaaa' -> 'aaaaba'
+# - depth = 2 :: 'aaaaaa' -> 'aaabaa'
+INCREMENT_DEPTH = 1
 
-def create_bulk_ranks(count: int):
-    ordered_ranks = [LOWEST_RANK]
+
+def create_bulk_ranks(count: int) -> list[str]:
+    """Create an evenly distributed list of ranks for a given count"""
+    ordered_ranks = [LOWEST_INITIAL_RANK]
     if count > 1:
-        interval = floor(HIGHEST_RANK_VALUE / (count - 1))
+        interval = floor(HIGHEST_INITIAL_RANK_VALUE / (count - 1))
         for i in range(count - 1):
             numerical_rank = interval * (i + 1)
-            base26_rank = convert_to_base26(numerical_rank, INITIAL_CIPHER_LENGTH)
+            adjusted_numerical_rank = numerical_rank + LOWEST_INITIAL_RANK_VALUE
+            base26_rank = convert_to_base26(adjusted_numerical_rank, INITIAL_CIPHER_LENGTH)
             rank = recipher(base26_rank)
             ordered_ranks.append(rank)
     return ordered_ranks
@@ -44,32 +53,18 @@ def create_mean_rank(prev_rank: str, next_rank: str) -> str:
     high_base10 = convert_to_base10(high_normalized)
 
     mean = find_mean(low_base10, high_base10)
-    print(f"{low_base10=}")
-    print(f"{high_base10=}")
-    print(f"{mean=}")
     mean_base26 = convert_to_base26(mean, cipher_length)
     new_rank = recipher(mean_base26)
-    print(f"{mean_base26=}")
+    valid_rank = validate_rank(prev_rank, next_rank, new_rank)
 
+    return valid_rank
+
+
+def increment_rank(prev_rank: str) -> str:
+    """Add a rank to the end of the ordered list of ranks by INCREMENT_DEPTH"""
+    deciphered = decipher_rank(prev_rank)
+    incremented_deciphered = increment_deciphered_rank(deciphered, INCREMENT_DEPTH)
+    new_rank = recipher(incremented_deciphered)
     return new_rank
 
 
-def create_highest_rank():
-    pass
-
-
-# """
-# OK stanley, here's the planley:
-#     if prev:
-#         find next rank
-#         if next:
-#             generate between prev and next
-#          else: (this is the last rank)
-#              new = rank + 1000
-#      else (no prev):
-#          try 'aaaaaa'
-#          except:
-#              find next
-#              old top = mean(aaaaaa, next)
-#              new rank = aaaaaa
-# """

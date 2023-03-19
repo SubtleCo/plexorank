@@ -1,7 +1,7 @@
 """Utility functions for lexicographical ranking"""
 from math import floor
 
-from plexorank.cipher_tables import decipher_table, cipher_table
+from plexorank.cipher_tables import cipher_table, decipher_table
 
 
 def find_mean(high, low):
@@ -17,14 +17,11 @@ def decipher_rank(rank: str) -> list[int]:
 
 def normalize_rank(deciphered: list[int], cipher_length: int) -> list[int]:
     """Pad a list of numbers with zeros to ensure equal depth comparison"""
-    print(f"{deciphered=}")
-    print(f"{cipher_length=}")
-    while len(deciphered) < cipher_length:
-        deciphered.append[0]
+    deciphered = deciphered + [0] * (cipher_length - len(deciphered))
     return deciphered
 
 
-def convert_to_base10(normalized: str) -> int:
+def convert_to_base10(normalized: list[int]) -> int:
     """Convert a base26 list of integers to a base10 integer"""
     numerical_rank = 0
     for i, number in enumerate(normalized):
@@ -62,3 +59,26 @@ def validate_rank(low, high, new):
 
 def get_greater_length(a: str, b: str):
     return len(a) if len(a) >= len(b) else len(b)
+
+
+def increment_deciphered_rank(deciphered_rank: list[int], increment_depth: int):
+    """Increment a list of integers, where 25 is the max with carry-over logic
+    - increment_depth represents reverse index (which item should we increment?)
+    - i.e. [1,3,25,7] with increment_depth of 1 should be [1,4,0,7]
+      - The 25 became 26, so that rolled over to 0 and incremented the next digit by 1 (3 -> 4)
+    """
+    new_deciphered_rank = deciphered_rank[:]
+    index = -increment_depth - 1
+    new_deciphered_rank[index] += 1
+    while 26 in new_deciphered_rank:
+        new_deciphered_rank[index] = 0
+        new_deciphered_rank[index - 1] += 1
+        index -= 1
+
+        if new_deciphered_rank[0] == 26:
+            """We've maxed out the potential value of this cipher length. Reset it and tack on an n"""
+            new_deciphered_rank = deciphered_rank[:]
+            new_deciphered_rank.append(13)
+            break
+    return new_deciphered_rank
+
