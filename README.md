@@ -35,13 +35,13 @@ Yeah, pretty well. Let's say you've allocated the `rank` column of your database
 # Usage
 `create_bulk_ranks` takes a single integer - the number of ranks you need - and returns a list of string ranks, evenly spaced from `bbbbbb` to `ffffff`.
 
-`create_mean_rank` takes two string ranks (e.g. `"abgkskjhg"` and `"ajdhfjhrt"`) and returns a new rank squarely in the middle (e.g. 
+`create_mean_rank` takes two string ranks (e.g. `"abgkskjhg"` and `"ajdhfjhrt"`) and returns a new rank squarely in the middle (e.g. `"afevywvmm"`)
 
+`increment_rank` takes a single string rank (e.g. `"aacbd"`) and returns a new rank incremented by a single value of the "second" position of the rank (in this case, b -> c) (e.g. `"aaccd"`)
+- "carrying" is implemented, i.e. `"aaza"` returns `"abaa"`
 
-
-
-
-
+`decrement_rank` takes a single string rank (e.g. `"aacbd"`) and returns a new rank decremented by a single value of the "second" position of the rank (in this case, b -> a) (e.g. `"aacad"`)
+- "carrying" is implemented, i.e. `"acaa"` returns `"abza"`
 
 
 
