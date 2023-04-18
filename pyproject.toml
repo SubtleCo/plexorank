@@ -1,6 +1,6 @@
 [project]
 name = "plexorank"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
   { name="Alex Martin", email="raymond.alex.martin@gmail.com"},
 ]
