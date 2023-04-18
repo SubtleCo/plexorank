@@ -7,7 +7,7 @@ Plexorank is a python implementation of a lexicographical ranking system.
 A perfect back-end pair for a front-end user based sorting preference, such as drag and drop operations, Plexorank was inspired by Jira's [Lexorank](https://www.youtube.com/watch?v=OjQv9xMoFbg).
 
 ## Why though?
-When a user drags an item before or after another item and expects that order to be maintained, we'll need some sort of storage mechanism to ensure persistant order, even after the user logs out. We'll also need something performant enough to allow a user to drag and drop rapidly without triggering loads of back-end computation.
+When a user drags an item before or after another item and expects that order to be maintained, we'll need some sort of storage mechanism to ensure persistent order, even after the user logs out. We'll also need something performant enough to allow a user to drag and drop rapidly without triggering loads of back-end computation.
 
 Enter Plexorank - when a user manually alters the order of a list or table, a new rank must be calculated. Using alphabetical rather than numerical sorting, we're able to perform only a single operation on the entity that was moved. To do this, when an item is moved in an order, the front end needs to send three pieces of information: the ids of the `previous_item`, the `current_item`, and the `next_item`. Previous and next may be ignored if an item is moved to the top or bottom of a list. We send ids rather than ranks themselves to ensure eventual consistency.
 
@@ -26,7 +26,7 @@ Plexorank uses a base-26 cipher:
 
 ### What about conflicts?
 Plexorank uses what I call "n-tacking" to solve conflicts. If a new rank conflicts with another rank in the same subset of entities, simply addind the letter "n" to the end of the new rank solves the problem in two wonderful ways:
-- First, thanks to sorting alphabetically using strings rather than sorting numbers, tacking a letter on to the end of a rank allows us to add a new layer of sorting possibilites that maintains the relative order of the existing ranks. For instance, if you needed a rank between `aaaa` and `aaab`, we simpy take the upper rank `aaaa` and tack on an "n" to get `aaaan`, which sits squarely between `aaaa` and `aaab`.
+- First, thanks to sorting alphabetically using strings rather than sorting numbers, tacking a letter on to the end of a rank allows us to add a new layer of sorting possibilities that maintains the relative order of the existing ranks. For instance, if you needed a rank between `aaaa` and `aaab`, we simpy take the upper rank `aaaa` and tack on an "n" to get `aaaan`, which sits squarely between `aaaa` and `aaab`.
 - Second, the letter "n" sits snug in the middle of the alphabet. We've not only solved the conflict, but we've provided 13 slots between `aaaa` and `aaaan` and 12 slots between `aaaan` and `aaab` before we'll need to tack on another "n"
 
 ### Does it scale?
