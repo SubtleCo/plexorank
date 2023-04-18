@@ -1,10 +1,11 @@
 """Functions around generating and modifying elements utilizing a lexicographical ranking system"""
 from math import floor
 
-from plexorank.utils import (
+from built_inspections_http.v2.utils.lexorank.utils import (
     convert_to_base10,
     convert_to_base26,
     decipher_rank,
+    decrement_deciphered_rank,
     find_mean,
     get_greater_length,
     increment_deciphered_rank,
@@ -13,6 +14,7 @@ from plexorank.utils import (
     validate_rank,
 )
 
+LOWER_BOUND = "aaaaaa"
 LOWEST_INITIAL_RANK = "bbbbbb"
 LOWEST_INITIAL_RANK_VALUE = 12356631
 HIGHEST_INITIAL_RANK = "ffffff"
@@ -61,10 +63,16 @@ def create_mean_rank(prev_rank: str, next_rank: str) -> str:
 
 
 def increment_rank(prev_rank: str) -> str:
-    """Add a rank to the end of the ordered list of ranks by INCREMENT_DEPTH"""
+    """Generate a rank after a supplied rank, incremented by INCREMENT_DEPTH"""
     deciphered = decipher_rank(prev_rank)
     incremented_deciphered = increment_deciphered_rank(deciphered, INCREMENT_DEPTH)
     new_rank = recipher(incremented_deciphered)
     return new_rank
 
 
+def decrement_rank(next_rank: str) -> str:
+    """Generate a rank before a supplied rank, decremented by INCREMENT_DEPTH"""
+    deciphered = decipher_rank(next_rank)
+    decremented_deciphered = decrement_deciphered_rank(deciphered, INCREMENT_DEPTH)
+    new_rank = recipher(decremented_deciphered)
+    return new_rank

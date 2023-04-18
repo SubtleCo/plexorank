@@ -82,3 +82,30 @@ def increment_deciphered_rank(deciphered_rank: list[int], increment_depth: int):
             break
     return new_deciphered_rank
 
+
+def decrement_deciphered_rank(deciphered_rank: list[int], increment_depth: int):
+    """Decrement a list of integers, where 0 is the min with carry-over logic and 25 is the max
+    - increment_depth represents reverse index (which item should we decrement?)
+    - i.e. [1,3,0,7] with increment_depth of 1 should be [1,2,25,7]
+      - The 0 became -1, so that rolled over to 25 and decremented the next digit by 1 (3 -> 2)
+
+    In the event that we are served the upper bound of a rank (i.e. [0,0,0,0]), there's nothing to decrement.
+    As items get moved around, the system will heal itself.
+    """
+    new_deciphered_rank = deciphered_rank[:]
+    index = -increment_depth - 1
+    new_deciphered_rank[index] -= 1
+    while -1 in new_deciphered_rank:
+        new_deciphered_rank[index] = 25
+        new_deciphered_rank[index - 1] -= 1
+        index -= 1
+
+        if new_deciphered_rank[0] == -1:
+            """We can't go any lower. Try to decrease by a single rank, else return [0,0,0,0]"""
+            if deciphered_rank[-1] == 0:
+                return deciphered_rank
+            else:
+                one_down_rank = deciphered_rank[:]
+                one_down_rank[-1] -= 1
+                return one_down_rank
+    return new_deciphered_rank
