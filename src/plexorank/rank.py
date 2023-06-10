@@ -45,19 +45,30 @@ def create_bulk_ranks(count: int) -> list[str]:
 def create_mean_rank(prev_rank: str, next_rank: str) -> str:
     """Generate a new rank inbetween two given ranks"""
     cipher_length = get_greater_length(prev_rank, next_rank)
+    print(f"{cipher_length=}")
 
     low_deciphered = decipher_rank(prev_rank)
+    print(f"{low_deciphered=}")
     low_normalized = normalize_rank(low_deciphered, cipher_length)
+    print(f"{low_normalized=}")
     low_base10 = convert_to_base10(low_normalized)
+    print(f"{low_base10=}")
 
     high_deciphered = decipher_rank(next_rank)
+    print(f"{high_deciphered=}")
     high_normalized = normalize_rank(high_deciphered, cipher_length)
+    print(f"{high_normalized=}")
     high_base10 = convert_to_base10(high_normalized)
+    print(f"{high_base10=}")
 
     mean = find_mean(low_base10, high_base10)
+    print(f"{mean=}")
     mean_base26 = convert_to_base26(mean, cipher_length)
+    print(f"{mean_base26=}")
     new_rank = recipher(mean_base26)
+    print(f"{new_rank=}")
     valid_rank = validate_rank(prev_rank, next_rank, new_rank)
+    print(f"{valid_rank=}")
 
     return valid_rank
 
