@@ -76,7 +76,9 @@ def create_mean_rank(prev_rank: str, next_rank: str) -> str:
 def increment_rank(prev_rank: str) -> str:
     """Generate a rank after a supplied rank, incremented by INCREMENT_DEPTH"""
     deciphered = decipher_rank(prev_rank)
+    print(f'{deciphered=}')
     incremented_deciphered = increment_deciphered_rank(deciphered, INCREMENT_DEPTH)
+    print(f'{incremented_deciphered=}')
     new_rank = recipher(incremented_deciphered)
     return new_rank
 
@@ -84,6 +86,8 @@ def increment_rank(prev_rank: str) -> str:
 def decrement_rank(next_rank: str) -> str:
     """Generate a rank before a supplied rank, decremented by INCREMENT_DEPTH"""
     deciphered = decipher_rank(next_rank)
+    print(f'{deciphered=}')
     decremented_deciphered = decrement_deciphered_rank(deciphered, INCREMENT_DEPTH)
+    print(f'{decremented_deciphered=}')
     new_rank = recipher(decremented_deciphered)
     return new_rank
